@@ -252,7 +252,9 @@ func vectorDir(t *testing.T) string {
 		t.Fatalf("resolve vectors dir: %v", err)
 	}
 	if _, err := os.Stat(dir); err != nil {
-		t.Fatalf("conformance/vectors must exist: %v", err)
+		// See the note in client/config_test.go: absent in the standalone
+		// mirror, mandatory in the monorepo where the corpus lives.
+		t.Skipf("conformance/vectors not reachable (standalone mirror?): %v", err)
 	}
 	return dir
 }

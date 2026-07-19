@@ -68,3 +68,18 @@ No registry credential and no new CI publish job are needed — the shared
 release-train gate (fmt/vet/test on the tagged commit) is the only thing that
 must stay green, and this lane adds `gofmt -l`, `go vet`, and `go test ./...`
 (corpus included) to it.
+
+## Where this code lives
+
+This module is **mirrored**: it is developed in the
+[`hivellm/thunder`](https://github.com/hivellm/thunder) monorepo under `go/`,
+and published from [`hivellm/thunder-go`](https://github.com/hivellm/thunder-go)
+so the Go module path resolves. In the monorepo the directory is a git
+submodule pointing here.
+
+One consequence worth knowing: the conformance tests read the corpus from the
+monorepo (`../../conformance/`), which is not present in this standalone
+mirror. They **skip** here and **run for real** in the monorepo, where changes
+to this code land and where the corpus is the source of truth. A green run in
+this repository therefore proves the Go code compiles and its own unit tests
+pass — the cross-language byte guarantee is verified upstream.
